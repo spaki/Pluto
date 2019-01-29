@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pluto.API.Auth;
@@ -10,6 +11,7 @@ using Pluto.Bus;
 using Pluto.Domain.Bus;
 using Pluto.Domain.Handlers;
 using Pluto.Domain.Handlers.Events;
+using Pluto.Domain.Interfaces.Identity;
 using Pluto.Domain.Interfaces.Repositories.Common;
 using Pluto.Repository.Repositories.Common;
 using Pluto.Repository.UoW;
@@ -33,6 +35,8 @@ namespace Pluto.API
                 .AddJwtAuth(this.AppSettings)
                 .AddScoped<IUnitOfWork, UnitOfWork>()
                 .AddScoped<IMediatorHandler, InMemoryBus>()
+                .AddScoped<IUser, UserControl>()
+                .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
                 .AddScopedByBaseType(typeof(CrudRepository<>)) // -> Repositories
                 .AddScopedHandlers(typeof(INotificationHandler<>), typeof(UserEventHandler).Assembly) // -> Events
                 .AddScopedHandlers(typeof(IRequestHandler<>), typeof(UserHandler).Assembly) // -> Commands
