@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Pluto.API.Controllers.Common;
 using Pluto.Domain.Bus;
-using Pluto.Domain.Commands;
+using Pluto.Domain.Commands.User;
 using Pluto.Domain.Interfaces.Repositories;
 using Pluto.Domain.Notifications;
 using System.Threading.Tasks;

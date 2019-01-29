@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Pluto.Domain.Bus;
-using Pluto.Domain.Commands;
+using Pluto.Domain.Commands.User;
 using Pluto.Domain.Events;
 using Pluto.Domain.Handlers.Common;
 using Pluto.Domain.Interfaces.Repositories;

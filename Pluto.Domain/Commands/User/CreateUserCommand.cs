@@ -1,6 +1,6 @@
 ﻿using Pluto.Domain.Commands.Common;
 
-namespace Pluto.Domain.Commands
+namespace Pluto.Domain.Commands.User
 {
     public class CreateUserCommand : Command
     {
