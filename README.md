@@ -37,5 +37,5 @@ To know more about how to setup your enviroment visit the [Microsoft .NET Downlo
 - Generic Repository
 
 ## About:
-Pluto developed by [Eduardo Spaki], the Enterprise Architect of Code21(http://www.code21.com.br) under the [MIT license](LICENSE).
+Pluto developed by Eduardo Spaki, the Enterprise Architect of [Code21](http://www.code21.com.br) under the [MIT license](LICENSE).
 
