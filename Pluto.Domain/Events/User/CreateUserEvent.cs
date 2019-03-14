@@ -1,7 +1,7 @@
 ﻿using Pluto.Domain.Events.Common;
 using System;
 
-namespace Pluto.Domain.Events
+namespace Pluto.Domain.Events.User
 {
     public class CreateUserEvent : Event
     {

@@ -28,7 +28,12 @@ namespace Pluto.API.Controllers.Common
         protected new IActionResult Response(object result = null)
         {
             if (IsValidOperation())
+            {
+                if (result == null)
+                    return Ok();
+
                 return Ok(result);
+            }
 
             return BadRequest(Notifications);
         }

@@ -20,5 +20,13 @@ namespace Pluto.Domain.Models
         public virtual string Name { get; private set; }
         public virtual string Email { get; private set; }
         public virtual string Password { get; private set; }
+
+        public void UpdateInfo(string name, string email)
+        {
+            Name = name;
+            Email = email;
+        }
+
+        public void ChangePassword(string password) => Password = password;
     }
 }
