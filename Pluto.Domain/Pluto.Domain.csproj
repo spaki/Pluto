@@ -12,8 +12,4 @@
     <ProjectReference Include="..\Pluto.Utils\Pluto.Utils.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commands\Product\" />
-  </ItemGroup>
-
 </Project>

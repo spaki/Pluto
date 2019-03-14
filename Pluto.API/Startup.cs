@@ -9,7 +9,7 @@ using Pluto.API.Settings;
 using Pluto.API.Setup;
 using Pluto.Bus;
 using Pluto.Domain.Bus;
-using Pluto.Domain.Handlers;
+using Pluto.Domain.Handlers.Commands;
 using Pluto.Domain.Handlers.Events;
 using Pluto.Domain.Interfaces.Identity;
 using Pluto.Domain.Interfaces.Repositories.Common;
@@ -39,7 +39,7 @@ namespace Pluto.API
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
                 .AddScopedByBaseType(typeof(CrudRepository<>)) // -> Repositories
                 .AddScopedHandlers(typeof(INotificationHandler<>), typeof(UserEventHandler).Assembly) // -> Events
-                .AddScopedHandlers(typeof(IRequestHandler<>), typeof(UserHandler).Assembly) // -> Commands
+                .AddScopedHandlers(typeof(IRequestHandler<>), typeof(UserCommandHandler).Assembly) // -> Commands
             ;
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env) =>

@@ -1,11 +1,11 @@
 ﻿using Pluto.Domain.Events.Common;
 using System;
 
-namespace Pluto.Domain.Events.User
+namespace Pluto.Domain.Events.Product
 {
-    public class DeleteUserEvent : Event
+    public class DeleteProductEvent : Event
     {
-        public DeleteUserEvent(Guid id)
+        public DeleteProductEvent(Guid id)
         {
             Id = id;
 

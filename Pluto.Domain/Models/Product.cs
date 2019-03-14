@@ -1,5 +1,6 @@
 ﻿using Pluto.Domain.Models.Common;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Pluto.Domain.Models
 {
@@ -27,7 +28,17 @@ namespace Pluto.Domain.Models
 
         public void AddPicture(string url)
         {
-            Pictures.Add(new PictureUrl(url));
+            if(!Pictures.Any(e => e.Url == url))
+                Pictures.Add(new PictureUrl(url));
         }
+
+        public void UpdateInfo(string name, string description, decimal price)
+        {
+            Name = name;
+            Description = description;
+            Price = price;
+        }
+
+        public string[] GetPictureUrls() => Pictures?.Select(e => e.Url).ToArray();
     }
 }

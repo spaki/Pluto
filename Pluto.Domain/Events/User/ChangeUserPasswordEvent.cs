@@ -13,7 +13,7 @@ namespace Pluto.Domain.Events.User
             AggregateId = Id;
         }
 
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; }
         public string Password { get; private set; }
     }
 }

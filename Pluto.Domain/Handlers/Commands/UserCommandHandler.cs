@@ -12,13 +12,13 @@ using Pluto.Utils.Validations;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Pluto.Domain.Handlers
+namespace Pluto.Domain.Handlers.Commands
 {
-    public class UserHandler : CommandHandler, IRequestHandler<CreateUserCommand>, IRequestHandler<UpdateUserCommand>, IRequestHandler<ChangeUserPasswordCommand>, IRequestHandler<DeleteUserCommand>
+    public class UserCommandHandler : CommandHandler, IRequestHandler<CreateUserCommand>, IRequestHandler<UpdateUserCommand>, IRequestHandler<ChangeUserPasswordCommand>, IRequestHandler<DeleteUserCommand>
     {
         private readonly IUserRepository userRepository;
 
-        public UserHandler(
+        public UserCommandHandler(
             IUnitOfWork uow, 
             IMediatorHandler bus, 
             INotificationHandler<DomainNotification> notifications, 
