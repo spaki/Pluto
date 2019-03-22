@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Pluto.Domain.Handlers.Commands
 {
-    public class ProductCommandHandler : CommandHandler, IRequestHandler<CreateProductCommand>, IRequestHandler<UpdateProductCommand>, IRequestHandler<DeleteProductCommand>
+    public class ProductCommandHandler : CommandHandler, IRequestHandler<CreateProductCommand, Product>, IRequestHandler<UpdateProductCommand>, IRequestHandler<DeleteProductCommand>
     {
         private readonly IProductRepository productRepository;
 
@@ -27,7 +27,7 @@ namespace Pluto.Domain.Handlers.Commands
             this.productRepository = productRepository;
         }
 
-        public async Task<Unit> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<Product> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             request
                 .IsNullEmptyOrWhitespace(e => e.Name, async () => await bus.InvokeDomainNotificationAsync("Invalid name."))
@@ -44,7 +44,7 @@ namespace Pluto.Domain.Handlers.Commands
             Commit();
             await bus.InvokeAsync(new CreateProductEvent(entity.Id, entity.Name, entity.Description, entity.Price, entity.GetPictureUrls()));
 
-            return Unit.Value;
+            return entity;
         }
 
         public async Task<Unit> Handle(UpdateProductCommand request, CancellationToken cancellationToken)

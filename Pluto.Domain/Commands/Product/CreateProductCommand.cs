@@ -2,7 +2,7 @@
 
 namespace Pluto.Domain.Commands.Product
 {
-    public class CreateProductCommand : Command
+    public class CreateProductCommand : RequestCommand<Models.Product>
     {
         public string Name { get; set; }
         public string Description { get; set; }
