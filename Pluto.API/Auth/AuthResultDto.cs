@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Pluto.API.Auth
+﻿namespace Pluto.API.Auth
 {
-    public class LoginResult
+    public class AuthResultDto
     {
         public bool Authenticated { get; set; }
         public string Message { get; set; }

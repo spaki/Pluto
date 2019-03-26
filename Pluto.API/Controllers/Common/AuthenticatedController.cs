@@ -3,7 +3,6 @@ using Pluto.API.Auth;
 using Pluto.Domain.Bus;
 using Pluto.Domain.Notifications;
 using System;
-using System.Linq;
 using System.Security.Claims;
 
 namespace Pluto.API.Controllers.Common
@@ -24,7 +23,5 @@ namespace Pluto.API.Controllers.Common
         {
             get => this.GetClaim(ClaimTypes.Role) == "Admin";
         }
-
-        protected string GetClaim(string claimType) => User.Claims.FirstOrDefault(x => x.Type == claimType)?.Value;
     }
 }

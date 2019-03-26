@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Pluto.Domain.Bus;
 using Pluto.Domain.Notifications;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Pluto.API.Controllers.Common
 {
@@ -37,5 +38,7 @@ namespace Pluto.API.Controllers.Common
 
             return BadRequest(Notifications);
         }
+
+        protected string GetClaim(string claimType) => User?.Claims?.FirstOrDefault(x => x.Type == claimType)?.Value;
     }
 }

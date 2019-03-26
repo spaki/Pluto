@@ -42,8 +42,7 @@ namespace Pluto.Domain.Handlers.Commands
                 .Is(e => e.PasswordConfirmation != e.Password, async () => await bus.InvokeDomainNotificationAsync("Invalid password confirmation."))
                 .Is(e => userRepository.AnyAsync(u => u.Email == request.Email).Result, async () => await bus.InvokeDomainNotificationAsync("E-mail already exists."));
 
-            var encryptedPassword = request.Password.Encrypt();
-            var entity = new User(request.Name, request.Email, encryptedPassword);
+            var entity = new User(request.Name, request.Email, request.Password);
             await userRepository.AddAsync(entity);
 
             Commit();
@@ -94,8 +93,7 @@ namespace Pluto.Domain.Handlers.Commands
                 .Is(e => e.PasswordConfirmation != e.Password, async () => await bus.InvokeDomainNotificationAsync("Invalid password confirmation."));
 
             // -> Set new info
-            var encryptedPassword = request.Password.Encrypt();
-            original.ChangePassword(encryptedPassword);
+            original.ChangePassword(request.Password);
 
             // -> Db persist
             await userRepository.UpdateAsync(original);

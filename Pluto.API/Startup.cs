@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +30,7 @@ namespace Pluto.API
                 .AddDistributedMemoryCache()
                 .AddSwagger()
                 .AddMediatR()
+                .AddAutoMapper()
                 .AddCustomMvc()
                 .AddSingleton(this.AppSettings)
                 .AddSqlServerContexts(this.AppSettings)

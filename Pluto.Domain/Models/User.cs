@@ -1,4 +1,5 @@
 ﻿using Pluto.Domain.Models.Common;
+using Pluto.Utils.Cryptography;
 
 namespace Pluto.Domain.Models
 {
@@ -14,7 +15,7 @@ namespace Pluto.Domain.Models
         {
             Name = name;
             Email = email;
-            Password = password;
+            Password = password.Encrypt();
         }
 
         public virtual string Name { get; private set; }
@@ -27,6 +28,8 @@ namespace Pluto.Domain.Models
             Email = email;
         }
 
-        public void ChangePassword(string password) => Password = password;
+        public void ChangePassword(string password) => Password = password.Encrypt();
+
+        public bool CheckPassword(string password) => password.Encrypt() == Password;
     }
 }

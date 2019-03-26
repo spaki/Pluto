@@ -52,7 +52,7 @@ namespace Pluto.API.Auth
             return services;
         }
 
-        public static LoginResult GenerateToken(User user, AppSettings appSettings, IDistributedCache cache, SigningConfigurations signingConfigurations)
+        public static AuthResultDto GenerateToken(User user, AppSettings appSettings, IDistributedCache cache, SigningConfigurations signingConfigurations)
         {
             var identity = new ClaimsIdentity
             (
@@ -83,7 +83,7 @@ namespace Pluto.API.Auth
 
             var token = handler.WriteToken(securityToken);
 
-            var result = new LoginResult
+            var result = new AuthResultDto
             {
                 Authenticated = true,
                 Created = created.ToString("yyyy-MM-dd HH:mm:ss"),
@@ -99,7 +99,7 @@ namespace Pluto.API.Auth
             cache.SetString
             (
                 result.RefreshToken,
-                JsonConvert.SerializeObject(new RefreshTokenData { RefreshToken = result.RefreshToken, Username = user.Email }),
+                JsonConvert.SerializeObject(new RefreshTokenData { RefreshToken = result.RefreshToken, Email = user.Email }),
                 cacheOptions
             );
 
