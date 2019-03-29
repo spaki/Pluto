@@ -4,7 +4,6 @@ using Pluto.API.Controllers.Common;
 using Pluto.Domain.Bus;
 using Pluto.Domain.Commands.Product;
 using Pluto.Domain.Interfaces.Repositories;
-using Pluto.Domain.Models;
 using Pluto.Domain.Notifications;
 using System;
 using System.Threading.Tasks;

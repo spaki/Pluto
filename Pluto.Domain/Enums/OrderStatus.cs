@@ -2,8 +2,9 @@
 {
     public enum OrderStatus
     {
-        Registered = 1,
-        Approved = 2,
+        Opened = 1,
+        Commited = 2,
+        Approved = 3,
         Canceled = 3
     }
 }

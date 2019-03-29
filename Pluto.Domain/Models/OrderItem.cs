@@ -19,6 +19,7 @@ namespace Pluto.Domain.Models
         public virtual Product Product { get; private set; }
         public virtual int Quantity { get; private set; }
 
+        public decimal ChangeQuantity(int newQuantity) => Quantity = newQuantity;
         public decimal GetTotal() => Quantity * Product.Price;
     }
 }

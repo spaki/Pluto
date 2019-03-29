@@ -18,14 +18,17 @@ namespace Pluto.Domain.Models
         {
             User = user;
 
-            Ticket = Guid.NewGuid().ToString("N").Substring(0, 8);
+            Ticket = Guid.NewGuid().ToString("N").Substring(0, 10);
             Items = new List<OrderItem>();
-            OrderStatus = OrderStatus.Registered;
-            Date = DateTime.UtcNow;
+            OrderStatus = OrderStatus.Opened;
+            Created = DateTime.UtcNow;
         }
 
         public virtual string Ticket { get; private set; }
-        public virtual DateTime Date { get; private set; }
+        public virtual DateTime Created { get; private set; }
+        public virtual DateTime? Commited { get; private set; }
+        public virtual DateTime? Approved { get; private set; }
+        public virtual DateTime? Canceled { get; private set; }
         public virtual User User { get; private set; }
         public virtual OrderStatus OrderStatus { get; private set; }
         public virtual ICollection<OrderItem> Items { get; private set; }
@@ -35,10 +38,40 @@ namespace Pluto.Domain.Models
             Items.Add(item);
         }
 
+        public void RemoveItemByProductId(Guid productId)
+        {
+            var item = Items.FirstOrDefault(e => e.Product.Id == productId);
+
+            if (item != null)
+                Items.Remove(item);
+        }
+
+        public void ChangeQuantityByProductId(Guid productId, int newQuantity)
+        {
+            var item = Items.FirstOrDefault(e => e.Product.Id == productId);
+
+            if (item != null)
+                item.ChangeQuantity(newQuantity);
+        }
+
         public decimal GetTotal() => Items.Sum(e => e.GetTotal());
 
-        public void Approve() => OrderStatus = OrderStatus.Approved;
+        public void Commit()
+        {
+            OrderStatus = OrderStatus.Commited;
+            Commited = DateTime.UtcNow;
+        }
 
-        public void Cancel() => OrderStatus = OrderStatus.Canceled;
+        public void Approve()
+        {
+            OrderStatus = OrderStatus.Approved;
+            Approved = DateTime.UtcNow;
+        }
+
+        public void Cancel()
+        {
+            OrderStatus = OrderStatus.Canceled;
+            Canceled = DateTime.UtcNow;
+        }
     }
 }

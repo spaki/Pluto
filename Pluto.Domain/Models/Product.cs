@@ -1,4 +1,5 @@
 ﻿using Pluto.Domain.Models.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,8 +20,10 @@ namespace Pluto.Domain.Models
             Price = price;
 
             Pictures = new List<PictureUrl>();
+            Code = Guid.NewGuid().ToString("N").Substring(0, 8);
         }
 
+        public virtual string Code { get; private set; }
         public virtual string Name { get; private set; }
         public virtual string Description { get; private set; }
         public virtual decimal Price { get; private set; }
