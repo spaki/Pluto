@@ -20,7 +20,7 @@ namespace Pluto.Domain.Models
 
             Ticket = Guid.NewGuid().ToString("N").Substring(0, 10);
             Items = new List<OrderItem>();
-            OrderStatus = OrderStatus.Opened;
+            Status = OrderStatus.Opened;
             Created = DateTime.UtcNow;
         }
 
@@ -30,7 +30,7 @@ namespace Pluto.Domain.Models
         public virtual DateTime? Approved { get; private set; }
         public virtual DateTime? Canceled { get; private set; }
         public virtual User User { get; private set; }
-        public virtual OrderStatus OrderStatus { get; private set; }
+        public virtual OrderStatus Status { get; private set; }
         public virtual ICollection<OrderItem> Items { get; private set; }
 
         public void AddItem(OrderItem item)
@@ -58,19 +58,19 @@ namespace Pluto.Domain.Models
 
         public void Commit()
         {
-            OrderStatus = OrderStatus.Commited;
+            Status = OrderStatus.Commited;
             Commited = DateTime.UtcNow;
         }
 
         public void Approve()
         {
-            OrderStatus = OrderStatus.Approved;
+            Status = OrderStatus.Approved;
             Approved = DateTime.UtcNow;
         }
 
         public void Cancel()
         {
-            OrderStatus = OrderStatus.Canceled;
+            Status = OrderStatus.Canceled;
             Canceled = DateTime.UtcNow;
         }
     }

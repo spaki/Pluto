@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Pluto.API.Auth;
 using Pluto.Domain.Bus;
+using Pluto.Domain.Enums;
 using Pluto.Domain.Notifications;
 using System;
 using System.Security.Claims;
@@ -21,7 +22,7 @@ namespace Pluto.API.Controllers.Common
 
         protected bool IsAdmin
         {
-            get => this.GetClaim(ClaimTypes.Role) == "Admin";
+            get => this.GetClaim(ClaimTypes.Role) == UserProfile.Admin.ToString();
         }
     }
 }

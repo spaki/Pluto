@@ -42,11 +42,11 @@ namespace Pluto.Domain.Handlers.Commands
                 .Is(e => e.PasswordConfirmation != e.Password, async () => await bus.InvokeDomainNotificationAsync("Invalid password confirmation."))
                 .Is(e => userRepository.AnyAsync(u => u.Email == request.Email).Result, async () => await bus.InvokeDomainNotificationAsync("E-mail already exists."));
 
-            var entity = new User(request.Name, request.Email, request.Password);
+            var entity = new User(request.Name, request.Email, request.Password, request.Profile);
             await userRepository.AddAsync(entity);
 
             Commit();
-            await bus.InvokeAsync(new CreateUserEvent(entity.Id, entity.Name, entity.Email, entity.Password));
+            await bus.InvokeAsync(new CreateUserEvent(entity.Id, entity.Name, entity.Email, entity.Password, entity.Profile));
 
             return Unit.Value;
         }
@@ -67,13 +67,13 @@ namespace Pluto.Domain.Handlers.Commands
                 .Is(e => userRepository.AnyAsync(u => u.Email == request.Email && u.Id != request.Id).Result, async () => await bus.InvokeDomainNotificationAsync("E-mail already exists."));
 
             // -> Set new info
-            original.UpdateInfo(request.Name, request.Email);
+            original.UpdateInfo(request.Name, request.Email, request.Profile);
 
             // -> Db persist
             await userRepository.UpdateAsync(original);
 
             Commit();
-            await bus.InvokeAsync(new UpdateUserEvent(original.Id, original.Name, original.Email));
+            await bus.InvokeAsync(new UpdateUserEvent(original.Id, original.Name, original.Email, original.Profile));
 
             return Unit.Value;
         }
