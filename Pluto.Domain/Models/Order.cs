@@ -35,6 +35,14 @@ namespace Pluto.Domain.Models
 
         public void AddItem(OrderItem item)
         {
+            var currentItem = Items.FirstOrDefault(e => e.Product.Id == item.Product.Id);
+
+            if (currentItem != null)
+            {
+                currentItem.ChangeQuantity(item.Quantity);
+                return;
+            }
+
             Items.Add(item);
         }
 
@@ -44,14 +52,6 @@ namespace Pluto.Domain.Models
 
             if (item != null)
                 Items.Remove(item);
-        }
-
-        public void ChangeQuantityByProductId(Guid productId, int newQuantity)
-        {
-            var item = Items.FirstOrDefault(e => e.Product.Id == productId);
-
-            if (item != null)
-                item.ChangeQuantity(newQuantity);
         }
 
         public decimal GetTotal() => Items.Sum(e => e.GetTotal());

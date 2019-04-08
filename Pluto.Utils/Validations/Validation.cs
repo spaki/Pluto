@@ -32,6 +32,16 @@ namespace Pluto.Utils.Validations
             return o;
         }
 
+        public static TSource IsLessThan<TSource>(this TSource o, Expression<Func<TSource, int>> expression, int targetValue, Action action)
+        {
+            var value = expression.Compile()(o);
+
+            if (value < targetValue)
+                action();
+
+            return o;
+        }
+
         public static TSource Is<TSource>(this TSource o, Func<TSource, bool> condition, Action action)
         {
             if (condition(o))

@@ -54,10 +54,27 @@ namespace Pluto.API.Controllers
             return Response(orderRepository.Query(e => e.User.Id == UserId));
         }
 
+        // -> Add or changes the quantity of a product from an order
+        //      The UserId comes from authentication, this way we aways get the opened order ("bag") from the user.
+        [HttpPost("Product")]
+        public async Task<IActionResult> AddProduct(AddProductCommand command)
+        {
+            command.UserId = UserId;
+            await bus.SendAsync(command);
+            return Response();
+        }
+
+        // -> Remove a product from an order
+        //      The UserId comes from authentication, this way we aways get the opened order ("bag") from the user.
+        [HttpDelete("Product")]
+        public async Task<IActionResult> RemoveProduct(RemoveProductCommand command)
+        {
+            command.UserId = UserId;
+            await bus.SendAsync(command);
+            return Response();
+        }
+
         /* 
-         * Add Product
-         * Remove Product
-         * Change Quantity
          * Cancel Order
          * Commit Order
          * Approve Order
