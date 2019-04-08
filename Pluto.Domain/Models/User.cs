@@ -35,5 +35,7 @@ namespace Pluto.Domain.Models
         public void ChangePassword(string password) => Password = password.Encrypt();
 
         public bool CheckPassword(string password) => password.Encrypt() == Password;
+
+        public bool IsAdmin() => Profile == UserProfile.Admin;
     }
 }

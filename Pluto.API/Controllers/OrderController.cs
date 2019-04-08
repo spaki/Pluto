@@ -7,6 +7,7 @@ using Pluto.Domain.Commands.Order;
 using Pluto.Domain.Enums;
 using Pluto.Domain.Interfaces.Repositories;
 using Pluto.Domain.Notifications;
+using System;
 using System.Threading.Tasks;
 
 namespace Pluto.API.Controllers
@@ -51,7 +52,7 @@ namespace Pluto.API.Controllers
         [BaererAuthorize(UserProfile.Admin)]
         public IActionResult GetMy()
         {
-            return Response(orderRepository.Query(e => e.User.Id == UserId));
+            return Response(orderRepository.Query(e => e.Customer.Id == UserId));
         }
 
         // -> Add or changes the quantity of a product from an order
@@ -74,10 +75,26 @@ namespace Pluto.API.Controllers
             return Response();
         }
 
-        /* 
-         * Cancel Order
-         * Commit Order
-         * Approve Order
-         */
+        [HttpPatch("{id}/Approve")]
+        [BaererAuthorize(UserProfile.Admin)]
+        public async Task<IActionResult> Approve(Guid id)
+        {
+            await bus.SendAsync(new ApproveOrderCommand { OrderId  = id, UserId = UserId });
+            return Response();
+        }
+
+        [HttpPatch("{id}/Cancel")]
+        public async Task<IActionResult> Cancel(Guid id)
+        {
+            await bus.SendAsync(new CancelOrderCommand { OrderId = id, UserId = UserId });
+            return Response();
+        }
+
+        [HttpPatch("{id}/Commit")]
+        public async Task<IActionResult> Commit(Guid id)
+        {
+            await bus.SendAsync(new CommitOrderCommand { OrderId = id, UserId = UserId });
+            return Response();
+        }
     }
 }

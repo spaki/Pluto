@@ -15,7 +15,14 @@ using System.Threading.Tasks;
 
 namespace Pluto.Domain.Handlers.Commands
 {
-    public class OrderCommandHandler : CommandHandler, IRequestHandler<CreateOrderCommand, Order>, IRequestHandler<AddProductCommand>, IRequestHandler<RemoveProductCommand>
+    public class OrderCommandHandler : 
+        CommandHandler, 
+        IRequestHandler<CreateOrderCommand, Order>, 
+        IRequestHandler<AddProductCommand>, 
+        IRequestHandler<RemoveProductCommand>,
+        IRequestHandler<ApproveOrderCommand>,
+        IRequestHandler<CommitOrderCommand>,
+        IRequestHandler<CancelOrderCommand>
     {
         private readonly IOrderRepository orderRepository;
         private readonly IProductRepository productRepository;
@@ -48,7 +55,7 @@ namespace Pluto.Domain.Handlers.Commands
             await orderRepository.AddAsync(entity);
 
             Commit();
-            await bus.InvokeAsync(new CreateOrderEvent(entity.Id, entity.Ticket, entity.User));
+            await bus.InvokeAsync(new CreateOrderEvent(entity.Id, entity.Ticket, entity.Customer));
 
             return entity;
         }
@@ -94,6 +101,57 @@ namespace Pluto.Domain.Handlers.Commands
             return Unit.Value;
         }
 
-        private async Task<Order> GetOpenenedOrderFromUser(Guid userId) => await orderRepository.FirstOrDefaultAsync(e => e.User.Id == userId && e.Status == OrderStatus.Opened);
+        public async Task<Unit> Handle(ApproveOrderCommand request, CancellationToken cancellationToken)
+        {
+            var order = await orderRepository.FirstOrDefaultAsync(e => e.Id == request.OrderId);
+
+            if (order == null)
+                return Unit.Value;
+
+            var user = await userRepository.GetAsync(request.UserId);
+
+            order.Approve(user);
+            await orderRepository.UpdateAsync(order);
+            Commit();
+            await bus.InvokeAsync(new ApproveOrderEvent(request.OrderId, request.UserId));
+
+            return Unit.Value;
+        }
+
+        public async Task<Unit> Handle(CommitOrderCommand request, CancellationToken cancellationToken)
+        {
+            var order = await orderRepository.FirstOrDefaultAsync(e => e.Id == request.OrderId);
+
+            if (order == null)
+                return Unit.Value;
+
+            var user = await userRepository.GetAsync(request.UserId);
+
+            order.Commit(user);
+            await orderRepository.UpdateAsync(order);
+            Commit();
+            await bus.InvokeAsync(new CommitOrderEvent(request.OrderId, request.UserId));
+
+            return Unit.Value;
+        }
+
+        public async Task<Unit> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
+        {
+            var order = await orderRepository.FirstOrDefaultAsync(e => e.Id == request.OrderId);
+
+            if (order == null)
+                return Unit.Value;
+
+            var user = await userRepository.GetAsync(request.UserId);
+
+            order.Cancel(user);
+            await orderRepository.UpdateAsync(order);
+            Commit();
+            await bus.InvokeAsync(new CancelOrderEvent(request.OrderId, request.UserId));
+
+            return Unit.Value;
+        }
+
+        private async Task<Order> GetOpenenedOrderFromUser(Guid userId) => await orderRepository.FirstOrDefaultAsync(e => e.Customer.Id == userId && e.Status == OrderStatus.Opened);
     }
 }

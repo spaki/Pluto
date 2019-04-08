@@ -14,9 +14,9 @@ namespace Pluto.Domain.Models
 
         }
 
-        public Order(User user)
+        public Order(User customer)
         {
-            User = user;
+            Editor = Customer = customer;
 
             Ticket = Guid.NewGuid().ToString("N").Substring(0, 10);
             Items = new List<OrderItem>();
@@ -29,7 +29,8 @@ namespace Pluto.Domain.Models
         public virtual DateTime? Commited { get; private set; }
         public virtual DateTime? Approved { get; private set; }
         public virtual DateTime? Canceled { get; private set; }
-        public virtual User User { get; private set; }
+        public virtual User Customer { get; private set; }
+        public virtual User Editor { get; private set; }
         public virtual OrderStatus Status { get; private set; }
         public virtual ICollection<OrderItem> Items { get; private set; }
 
@@ -56,22 +57,36 @@ namespace Pluto.Domain.Models
 
         public decimal GetTotal() => Items.Sum(e => e.GetTotal());
 
-        public void Commit()
+        public void Commit(User editor)
         {
+            if (Status != OrderStatus.Opened && IsValidEditor(editor))
+                return;
+
             Status = OrderStatus.Commited;
             Commited = DateTime.UtcNow;
+            Editor = editor;
         }
 
-        public void Approve()
+        public void Approve(User editor)
         {
+            if (Status != OrderStatus.Commited && editor.IsAdmin())
+                return;
+
             Status = OrderStatus.Approved;
             Approved = DateTime.UtcNow;
+            Editor = editor;
         }
 
-        public void Cancel()
+        public void Cancel(User editor)
         {
+            if (Status == OrderStatus.Approved && IsValidEditor(editor))
+                return;
+
             Status = OrderStatus.Canceled;
             Canceled = DateTime.UtcNow;
+            Editor = editor;
         }
+
+        private bool IsValidEditor(User editor) => editor.Id == Customer.Id || editor.IsAdmin();
     }
 }
